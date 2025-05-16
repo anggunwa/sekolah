@@ -16,8 +16,33 @@ $_SESSION['old'] = [
 ];
 
 // Validasi
-if (empty($nisn) || empty($nama_lengkap) || empty($alamat)) {
-    $_SESSION['error'] = "Semua field wajib diisi.";
+$errors = [];
+
+if (empty($nisn)) {
+    $errors[] = "NISN wajib diisi.";
+} elseif (!ctype_digit($nisn)) {
+    $errors[] = "NISN harus berupa angka.";
+} elseif (strlen($nisn) !== 10) {
+    $errors[] = "NISN harus tepat 10 digit.";
+} elseif ((int)$nisn > 9999999999) {
+    $errors[] = "NISN tidak boleh lebih dari 9999999999.";
+}
+
+if (empty($nama_lengkap)) {
+    $errors[] = "Nama lengkap wajib diisi.";
+} elseif (!preg_match("/^[a-zA-Z\s]+$/", $nama_lengkap)) {
+    $errors[] = "Nama hanya boleh huruf dan spasi.";
+}
+
+if (empty($alamat)) {
+    $errors[] = "Alamat wajib diisi.";
+} elseif (strlen($alamat) < 5) {
+    $errors[] = "Alamat terlalu pendek (minimal 5 karakter).";
+}
+
+// Jika ada error, kembalikan ke form
+if (!empty($errors)) {
+    $_SESSION['error'] = implode("<br>", $errors);
     header("Location: edit-siswa.php?id=$id_siswa");
     exit();
 }

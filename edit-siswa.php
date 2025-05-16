@@ -60,7 +60,7 @@ session_start();
                 
                 <div class="form-group">
                   <label>NISN</label>
-                  <input type="text" name="nisn" value="<?= htmlspecialchars($old['nisn'] ?? $row['nisn']) ?>" placeholder="Masukkan NISN Siswa" class="form-control">
+                  <input type="text" name="nisn" maxlength="10" value="<?= htmlspecialchars($old['nisn'] ?? $row['nisn']) ?>" placeholder="Masukkan NISN Siswa" class="form-control">
                   <input type="hidden" name="id_siswa" value="<?php echo $row['id_siswa'] ?>">
                 </div>
 
