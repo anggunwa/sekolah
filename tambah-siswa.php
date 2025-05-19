@@ -1,13 +1,21 @@
 <?php
 session_start(); // HARUS di paling atas sebelum HTML
 
+// Token CSRF
+if (empty($_SESSION['csrf_token'])) {
+  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 // Ambil data lama jika ada
 $old = $_SESSION['old'] ?? [
     'nisn' => '',
     'nama_lengkap' => '',
     'alamat' => ''
 ];
+unset($_SESSION['old']);
+
 ?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -44,21 +52,42 @@ $old = $_SESSION['old'] ?? [
               <form action="simpan-siswa.php" method="POST">
                 <div class="form-group">
                   <label>NISN</label>
-                  <input type="text" name="nisn" placeholder="Masukkan NISN Siswa" class="form-control"
-                    value="<?= htmlspecialchars($old['nisn']) ?>">
+                  <input 
+                    type="text" 
+                    name="nisn" 
+                    placeholder="Masukkan NISN Siswa" 
+                    class="form-control"
+                    maxlength="10" 
+                    pattern="\d*" 
+                    inputmode="numeric"
+                    value="<?= htmlspecialchars($old['nisn'] ?? '') ?>">
                 </div>
 
                 <div class="form-group">
                   <label>Nama Lengkap</label>
-                  <input type="text" name="nama_lengkap" placeholder="Masukkan Nama Siswa" class="form-control"
-                    value="<?= htmlspecialchars($old['nama_lengkap']) ?>">
+                  <input 
+                    type="text" 
+                    name="nama_lengkap" 
+                    placeholder="Masukkan Nama Siswa" 
+                    class="form-control"
+                    maxlength="50"
+                    pattern="[A-Za-z\s]+"
+                    title="Nama hanya boleh berisi huruf dan spasi"
+                    value="<?= htmlspecialchars($old['nama_lengkap'] ?? '') ?>">
                 </div>
 
                 <div class="form-group">
                   <label>Alamat</label>
-                  <textarea class="form-control" name="alamat" placeholder="Masukkan Alamat Siswa" rows="4"><?= htmlspecialchars($old['alamat']) ?></textarea>
+                  <textarea 
+                    class="form-control" 
+                    name="alamat" 
+                    placeholder="Masukkan Alamat Siswa" 
+                    rows="4"
+                    maxlength="255"><?= htmlspecialchars($old['alamat'] ?? '') ?></textarea>
                 </div>
 
+                <!-- di dalam form -->
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']?>">
                 <button type="submit" class="btn btn-success">SIMPAN</button>
                 <button type="reset" class="btn btn-warning">RESET</button>
               </form>

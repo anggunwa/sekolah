@@ -1,5 +1,11 @@
 <?php session_start(); ?>
 
+<?php
+  if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+  }
+?>
+
 <?php if (isset($_SESSION['success'])): ?>
   <div class="alert alert-success">
     <?= $_SESSION['success']; unset($_SESSION['success']); ?>
@@ -53,7 +59,11 @@
                       <td><?php echo $row['alamat'] ?></td>
                       <td class="text-center">
                         <a href="edit-siswa.php?id=<?php echo $row['id_siswa'] ?>" class="btn btn-sm btn-primary">EDIT</a>
-                        <a href="hapus-siswa.php?id=<?php echo $row['id_siswa'] ?>" class="btn btn-sm btn-danger">HAPUS</a>
+                        <form action="hapus-siswa.php" method="POST" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                          <input type="hidden" name="id_siswa" value="<?= $row['id_siswa'] ?>">
+                          <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']?>">
+                          <button type="submit" class="btn btn-danger">HAPUS</button>
+                        </form>
                       </td>
                   </tr>
 

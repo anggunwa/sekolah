@@ -9,9 +9,12 @@ session_start();
   }
 
   $id = $_GET['id'];
-  $query = "SELECT * FROM tbl_siswa WHERE id_siswa = $id LIMIT 1";
-  $result = mysqli_query($connection, $query);
-  $row = mysqli_fetch_array($result);
+  $query = "SELECT * FROM tbl_siswa WHERE id_siswa = ?";
+  $stmt = $connection->prepare($query);
+  $stmt->bind_param("i", $id);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $row = $result->fetch_assoc();
 
   
   if (!$row) {
@@ -54,24 +57,32 @@ session_start();
                 </div>
               <?php endif; ?>
 
+              <!-- token CSRF -->
+                <?php
+                  if (!isset($_SESSION['csrf_token'])) {
+                    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                  }                  
+                ?>
 
               <form action="update-siswa.php" method="POST">
+                <!-- di dalam form -->
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'])?>">
+                <input type="hidden" name="id_siswa" value="<?= $row['id_siswa'] ?>">
 
-                
                 <div class="form-group">
                   <label>NISN</label>
-                  <input type="text" name="nisn" maxlength="10" value="<?= htmlspecialchars($old['nisn'] ?? $row['nisn']) ?>" placeholder="Masukkan NISN Siswa" class="form-control">
+                  <input type="text" name="nisn" maxlength="10" pattern="\d{1,10}" value="<?= htmlspecialchars($old['nisn'] ?? $row['nisn']) ?>" placeholder="Masukkan NISN Siswa" title="Maksimal 10 angka" class="form-control" required>
                   <input type="hidden" name="id_siswa" value="<?php echo $row['id_siswa'] ?>">
                 </div>
 
                 <div class="form-group">
                   <label>Nama Lengkap</label>
-                  <input type="text" name="nama_lengkap" value="<?= htmlspecialchars($old['nama_lengkap'] ?? $row['nama_lengkap']) ?>" placeholder="Masukkan Nama Siswa" class="form-control">
+                  <input type="text" name="nama_lengkap" value="<?= htmlspecialchars($old['nama_lengkap'] ?? $row['nama_lengkap']) ?>" placeholder="Masukkan Nama Siswa" pattern="[a-zA-Z\s]+" title="Hanya huruf dan spasi" class="form-control" required>
                 </div>
 
                 <div class="form-group">
                   <label>Alamat</label>
-                  <textarea class="form-control" name="alamat" placeholder="Masukkan Alamat Siswa" rows="4"><?= htmlspecialchars($old['alamat'] ?? $row['alamat']) ?></textarea>
+                  <textarea class="form-control" name="alamat" placeholder="Masukkan Alamat Siswa" rows="4" required><?= htmlspecialchars($old['alamat'] ?? $row['alamat']) ?></textarea>
                 </div>
                 
                 <button type="submit" class="btn btn-success">UPDATE</button>
