@@ -1,13 +1,7 @@
 <?php 
 
-  require_once 'inludes/init.php'; 
-
-  if (!isset($_SESSION["is_login"])) {
-    $_SESSION['error'] = "Silakan login terlebih dahulu!";
-    header("Location: login.php");
-    exit;
-  }
-
+  require_once __DIR__ . 'includes/init.php'; 
+  require_login(); // proteksi halaman
 ?>
 
 <?php
