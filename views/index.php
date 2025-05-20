@@ -1,4 +1,14 @@
-<?php session_start(); ?>
+<?php 
+
+  require_once 'inludes/init.php'; 
+
+  if (!isset($_SESSION["is_login"])) {
+    $_SESSION['error'] = "Silakan login terlebih dahulu!";
+    header("Location: login.php");
+    exit;
+  }
+
+?>
 
 <?php
   if (empty($_SESSION['csrf_token'])) {
@@ -20,17 +30,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
-    <title>Data Siswa</title>
+    <title>Data Siswa - Aplikasi Sekolah Negeri Hogwarts</title>
   </head>
 
   <body>
 
-    <div class="container" style="margin-top: 80px">
+    <div class="container mt-5" style="margin-top: 80px">
       <div class="row">
         <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">
-              DATA SISWA
+
+          <!-- Notifikasi -->
+          <?php if (isset($_SESSION['success'])): ?>
+          <div class="alert alert-success alert-dismissable fade show" role="alert">
+            <?= $_SESSION['success']; unset($_SESSION['success']); ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <?php endif; ?>
+
+          <div="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <div>
+                <strong>DATA SISWA - SEKOLAH NEGERI HOGWARTS</strong>
+              </div>
+              <div class="d-flex aligh-items-center">
+                <span class="mr-3 text-muted">
+                👤 <?= $_SESSION['username'] ?? 'Pengguna' ?>
+                </span>
+              <a href="logout.php" class="btn btn-outline-danger btn-sm justify-content-end">Logout</a>
+              </div>
             </div>
             <div class="card-body">
               <a href="tambah-siswa.php" class="btn btn-md btn-success" style="margin-bottom: 10px">TAMBAH DATA</a>
@@ -58,11 +87,14 @@
                       <td><?php echo $row['nama_lengkap'] ?></td>
                       <td><?php echo $row['alamat'] ?></td>
                       <td class="text-center">
-                        <a href="edit-siswa.php?id=<?php echo $row['id_siswa'] ?>" class="btn btn-sm btn-primary">EDIT</a>
+                        <form action="edit-siswa.php" method="GET" style="display :inline">
+                          <input type="hidden" name="id" value="<?= $row['id_siswa']?>">
+                          <button type="submit" class="btn btn-sm btn-primary">EDIT</button>
+                        </form>
                         <form action="hapus-siswa.php" method="POST" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                           <input type="hidden" name="id_siswa" value="<?= $row['id_siswa'] ?>">
                           <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']?>">
-                          <button type="submit" class="btn btn-danger">HAPUS</button>
+                          <button type="submit" class="btn btn-sm btn-danger">HAPUS</button>
                         </form>
                       </td>
                   </tr>
