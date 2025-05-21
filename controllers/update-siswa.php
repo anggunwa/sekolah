@@ -1,15 +1,10 @@
 <?php
-session_start();
-include('koneksi.php');
 
-if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {        $_SESSION['error'] = "Permintaan tidak valid (CSRF Detected)";
+require_once __DIR__ . "includes/init.php";
+
+if (!validate_csrf_token($_POST['csrf_token']) ?? '') {
+    $_SESSION['error'] = "Permintaan tidak valid (CSRF Detected)";
     header("Location: edit-siswa.php");
-    exit();
-}
-
-if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-    $_SESSION['error'] = "Permintaan tidak valid (CSRF token gagal).";
-    header("Location: edit-siswa.php?id=" . $_POST['id_siswa']);
     exit();
 }
 

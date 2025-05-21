@@ -1,8 +1,9 @@
 <?php
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+/* if (session_status() == PHP_SESSION_NONE) {
+  session_start();
 }
+*/
 
 // cek apakah user sudah login
 function is_logged_in() {
@@ -16,14 +17,14 @@ function is_logged_in() {
             header('Location: login.php');
             exit;
         }
-        return isset($_SESSION['is_login']) && $_SESSION['is_login'] === true;
+        return true;
     }
 
     // logout user
     function logout() {
         session_unset();
         session_destroy();
-        header('Location: login.php');
+        header('Location: /sekolah/login.php');
         exit;
     }
 

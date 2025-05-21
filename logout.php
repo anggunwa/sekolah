@@ -1,7 +1,10 @@
 <?php
+
     session_start();
-    session_unset(); // menghapus semua data sesi
-    session_destroy(); // menghancurkan sesi
+    
+    require_once __DIR__ . "/includes/init.php";
+    
+    logout();
     header("Location: login.php"); // arahkan ke halaman login
     exit;
 ?>

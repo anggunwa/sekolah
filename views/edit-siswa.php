@@ -1,7 +1,6 @@
 <?php 
-  
-session_start();
 
+  require_once __DIR__ . "/includes/init.php";
   include('koneksi.php');
   
   if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -56,13 +55,6 @@ session_start();
                   <?= htmlspecialchars($error) ?>
                 </div>
               <?php endif; ?>
-
-              <!-- token CSRF -->
-                <?php
-                  if (!isset($_SESSION['csrf_token'])) {
-                    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-                  }                  
-                ?>
 
               <form action="update-siswa.php" method="POST">
                 <!-- di dalam form -->

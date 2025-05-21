@@ -1,10 +1,6 @@
 <?php
-session_start(); // HARUS di paling atas sebelum HTML
 
-// Token CSRF
-if (empty($_SESSION['csrf_token'])) {
-  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
+require_once __DIR__ . "/includes/init.php";
 
 // Ambil data lama jika ada
 $old = $_SESSION['old'] ?? [

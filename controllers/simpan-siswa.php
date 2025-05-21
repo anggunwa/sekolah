@@ -1,10 +1,10 @@
 <?php
-    session_start();
-    include("koneksi.php");
+    
+    require_once __DIR__ . "/includes/init.php";
 
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    if (!validate_csrf_token($_POST['csrf_token']) ?? '') {
         $_SESSION['error'] = "Permintaan tidak valid (CSRF token gagal)";
-        header("Location: tambah-siswa.php");
+         header("Location: tambah-siswa.php");
         exit();
     }
 

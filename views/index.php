@@ -1,13 +1,7 @@
 <?php 
 
-  require_once __DIR__ . 'includes/init.php'; 
-  require_login(); // proteksi halaman
-?>
-
-<?php
-  if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-  }
+  require_once __DIR__ . "/../includes/init.php";
+  require_login(); // proteksi halaman  
 ?>
 
 <?php if (isset($_SESSION['success'])): ?>
@@ -43,7 +37,7 @@
           </div>
           <?php endif; ?>
 
-          <div="card">
+          <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
               <div>
                 <strong>DATA SISWA - SEKOLAH NEGERI HOGWARTS</strong>
@@ -52,7 +46,7 @@
                 <span class="mr-3 text-muted">
                 👤 <?= $_SESSION['username'] ?? 'Pengguna' ?>
                 </span>
-              <a href="logout.php" class="btn btn-outline-danger btn-sm justify-content-end">Logout</a>
+              <a href="/sekolah/logout.php" class="btn btn-outline-danger btn-sm justify-content-end">Logout</a>
               </div>
             </div>
             <div class="card-body">
@@ -68,8 +62,7 @@
                   </tr>
                 </thead>    
                 <tbody>
-                  <?php 
-                      include('koneksi.php');
+                  <?php
                       $no = 1;
                       $query = mysqli_query($connection,"SELECT * FROM tbl_siswa");
                       while($row = mysqli_fetch_array($query)){
