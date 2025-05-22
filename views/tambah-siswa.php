@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/includes/init.php";
+require_once __DIR__ . "/../includes/init.php";
 
 // Ambil data lama jika ada
 $old = $_SESSION['old'] ?? [
@@ -28,7 +28,7 @@ unset($_SESSION['old']);
         <div class="col-md-8 offset-md-2">
           <div class="card">
             <div class="card-header">
-              TAMBAH SISWA
+              TAMBAH DATA SISWA
             </div>
             <div class="card-body">
 
@@ -39,13 +39,7 @@ unset($_SESSION['old']);
                 </div>
               <?php endif; ?>
 
-              <?php if (isset($_SESSION['success'])): ?>
-                <div class="alert alert-success">
-                  <?= $_SESSION['success']; unset($_SESSION['success']); ?>
-                </div>
-              <?php endif; ?>
-
-              <form action="simpan-siswa.php" method="POST">
+              <form action="/sekolah/controllers/simpan-siswa.php" method="POST">
                 <div class="form-group">
                   <label>NISN</label>
                   <input 
@@ -83,7 +77,6 @@ unset($_SESSION['old']);
                 </div>
 
                 <!-- di dalam form -->
-                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']?>">
                 <button type="submit" class="btn btn-success">SIMPAN</button>
                 <button type="reset" class="btn btn-warning">RESET</button>
               </form>

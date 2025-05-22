@@ -1,10 +1,10 @@
 <?php
 
-require_once __DIR__ . "includes/init.php";
+require_once __DIR__ . "/../includes/init.php";
 
 if (!validate_csrf_token($_POST['csrf_token']) ?? '') {
     $_SESSION['error'] = "Permintaan tidak valid (CSRF Detected)";
-    header("Location: edit-siswa.php");
+    header("Location: /sekolah/views/edit-siswa.php");
     exit();
 }
 
@@ -24,7 +24,7 @@ $_SESSION['old'] = [
 // Validasi kosong
 if (empty($nisn) || empty($nama_lengkap) || empty($alamat)) {
     $_SESSION['error'] = "Semua field wajib diisi.";
-    header("Location: edit-siswa.php?id=$id_siswa");
+    header("Location: views/edit-siswa.php?id=$id_siswa");
     exit();
 }
 
@@ -57,7 +57,7 @@ if (empty($alamat)) {
 // Jika ada error, kembalikan ke form
 if (!empty($errors)) {
     $_SESSION['error'] = implode("<br>", $errors);
-    header("Location: edit-siswa.php?id=$id_siswa");
+    header("Location: views/edit-siswa.php?id=$id_siswa");
     exit();
 }
 
@@ -69,7 +69,7 @@ $stmt = $connection->prepare($sql);
 // Cek apakah prepare berhasil
 if (!$stmt) {
     $_SESSION['error'] = "Terjadi kesalahan pada query: " . $connection->error;
-    header("Location: edit-siswa.php?id=$id_siswa");
+    header("Location: views/edit-siswa.php?id=$id_siswa");
     exit();
 }
 
@@ -80,11 +80,11 @@ $stmt->bind_param("sssi", $nisn, $nama_lengkap, $alamat, $id_siswa);
 if ($stmt->execute()) {
     unset($_SESSION['csrf_token']);
     $_SESSION['success'] = "Data berhasil diperbarui!";
-    header("Location: index.php");
+    header("Location: /../views/index.php");
     exit();
 } else {
     $_SESSION['error'] = "Gagal memperbarui data.";
-    header("Location: edit-siswa.php?id=$id_siswa");
+    header("Location: /../views/edit-siswa.php?id=$id_siswa");
     exit();
 }
 ?>

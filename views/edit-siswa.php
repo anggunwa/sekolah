@@ -1,7 +1,6 @@
 <?php 
 
-  require_once __DIR__ . "/includes/init.php";
-  include('koneksi.php');
+  require_once __DIR__ . "/../includes/init.php";
   
   if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("ID siswa tidak valid.");
@@ -56,9 +55,8 @@
                 </div>
               <?php endif; ?>
 
-              <form action="update-siswa.php" method="POST">
+              <form action="/sekolah/controllers/update-siswa.php" method="POST">
                 <!-- di dalam form -->
-                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'])?>">
                 <input type="hidden" name="id_siswa" value="<?= $row['id_siswa'] ?>">
 
                 <div class="form-group">

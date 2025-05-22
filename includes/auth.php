@@ -14,7 +14,7 @@ function is_logged_in() {
     function require_login() {
         if (!is_logged_in()) {
             $_SESSION['error'] = 'Anda harus login terlebih dahulu!';
-            header('Location: login.php');
+            header('Location: /sekolah/login.php');
             exit;
         }
         return true;

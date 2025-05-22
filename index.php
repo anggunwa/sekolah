@@ -1,13 +1,22 @@
 <?php
 
-require_once __DIR__ . "/includes/init.php";
+session_start();
 
 // Redirect jika belum login
-if (!is_logged_in()) {
-    $_SESSION['error'] = "Anda harus login terlebih dahulu!";
-    header('Location: /sekolah/login.php');
+if (empty($_SESSION["is_login"])) {
+    header("Location: login.php");
     exit;
 }
 
-// Tampilkan halaman utama
-require_once __DIR__ . "/views/index.php";
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h2>Selama datang, <?= $_SESSION['username']?></h2>
+    <a href="logout.php">Logout</a>
+</body>
+</html>

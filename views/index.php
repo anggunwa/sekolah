@@ -65,7 +65,7 @@
                   <?php
                       $no = 1;
                       $query = mysqli_query($connection,"SELECT * FROM tbl_siswa");
-                      while($row = mysqli_fetch_array($query)){
+                      while($row = mysqli_fetch_array($query)):
                   ?>
 
                   <tr>
@@ -74,19 +74,19 @@
                       <td><?php echo $row['nama_lengkap'] ?></td>
                       <td><?php echo $row['alamat'] ?></td>
                       <td class="text-center">
-                        <form action="edit-siswa.php" method="GET" style="display :inline">
+                        <!-- tombol edit & hapus -->
+                        <form action="/sekolah/views/edit-siswa.php" method="GET" style="display :inline">
                           <input type="hidden" name="id" value="<?= $row['id_siswa']?>">
                           <button type="submit" class="btn btn-sm btn-primary">EDIT</button>
                         </form>
                         <form action="hapus-siswa.php" method="POST" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                           <input type="hidden" name="id_siswa" value="<?= $row['id_siswa'] ?>">
-                          <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']?>">
                           <button type="submit" class="btn btn-sm btn-danger">HAPUS</button>
                         </form>
                       </td>
                   </tr>
 
-                <?php } ?>
+                <?php endwhile; ?>
                 </tbody>
               </table>
             </div>

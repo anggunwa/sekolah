@@ -1,13 +1,30 @@
 <?php 
 
-define("PUBLIC_PAGE", true);
+session_start();
 
-require_once __DIR__ . "/includes/init.php"; 
-
-// jika sudah login, langsun alihkan ke index
-if (!empty($_SESSION['is_login'])) {
-    header('Location: index.php');
+// Jika sudah login, langsung redirect
+if (isset($_SESSION['is_login'])  && $_SESSION['is_login'] === true) {
+    header("Location: /sekolah/views/index.php");
     exit;
+}
+
+// Jika form disubmit
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+
+    $valid_username = "admin";
+    $valid_password = "123";
+
+    if ($username === $valid_username && $password == $valid_password) {
+        $_SESSION["is_login"] = true;
+        $_SESSION["username"] = $username;
+        header("Location: /sekolah/views/index.php");
+        exit;
+    } else {
+        $error = "Username atau password salah!";
+    }
 }
 
 ?>
@@ -22,33 +39,17 @@ if (!empty($_SESSION['is_login'])) {
     <title>Login</title>
 </head>
 <body>
-   <!-- <div class="container mt-5">
-        <h2>Login Atmint</h2>
-        <?php if (isset($_SESSION['error'])): ?>
 
-            <div class="alert alert-danger"><?= $_SESSION['error']; unset($_SESSION['error']) ?></div>
+    <h2>Login</h2>
+    <?php 
+    
+      if (isset($error)) echo "<p style='color:red;'>$error</p>";
 
-        <?php endif; ?>
-        <form action="controllers/cek-login.php" method="POST">
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" name="username" class="form-control" required
-                        value="<?= isset($_SESSION['old_username']) ? htmlspecialchars($_SESSION['old_username']) : '' ?>">
-            </div>  
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary">LOGIN</button>
+    ?>
 
-        </form>
-        <?php unset($_SESSION['old_username']); ?>
-    </div> -->
-
-    <h2>Login Dummy</h2>
-        <form action="controllers/cek-login.php" method="POST">
-            <input type="text" name="username" placeholder="username">
-            <input type="password" name="password" placeholder="password">
+        <form action="" method="POST">
+            <input type="text" name="username" placeholder="username" required><br><br>
+            <input type="password" name="password" placeholder="password" required><br><br>
             <button type="submit">Login</button>
 </body>
 </html>

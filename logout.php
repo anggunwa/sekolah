@@ -1,10 +1,7 @@
 <?php
 
-    session_start();
-    
-    require_once __DIR__ . "/includes/init.php";
-    
-    logout();
+    session_start();    
+    session_destroy();
     header("Location: login.php"); // arahkan ke halaman login
     exit;
 ?>
